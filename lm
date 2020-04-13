@@ -1,0 +1,61 @@
+#!/bin/sh
+# author: l33tgho
+# title: *-_*LuMeN*_-*
+# description: script for manual brightness regulation. 
+#              "lm" is the unit of luminous flux.
+### 
+
+path1=/sys/devices/pci0000:00/0000:00:02.0/drm
+card=$(ls $path1|grep card)
+path=$path1/$card/$card-eDP-1/intel_backlight
+val=""
+#####
+# run it without arguments
+if [ $# == 0 ]; then
+	while [[ $val != "ok" ]]; do
+		act=$(cat $path/actual_brightness)
+		sudo echo -n ""
+		tput clear
+		sudo echo "#################"
+		sudo echo "# *-_*LuMen*_-* #"
+		sudo echo "#################"
+		#sudo echo "# Valore attuale $act"
+		sudo echo "# commands:" 
+		sudo echo "# [ok -> quit]"
+		sudo echo "# [min - max]"
+		sudo echo "# [100 - 5273]"
+		sudo echo -n "# (actual $act) > "
+		
+		read val
+		
+		if [[ $val != "ok" ]]; then
+			if [[ $val == "min" ]]; then
+				echo 100 | sudo tee -a $path/brightness
+			elif [[ $val == "max" ]]; then
+				echo 5250 | sudo tee -a $path/brightness
+			else
+				echo $val | sudo tee -a $path/brightness
+			fi
+		fi
+	done
+#####
+# run it with arguments
+else
+	if [ $1 == "-" ]; then
+		echo $(expr $act - 250) | sudo tee -a $path/brightness
+	elif [ $1 == "--" ]; then
+		echo $(expr $act - 750) | sudo tee -a $path/brightness
+    elif [ $1 == "+" ]; then
+		echo $(expr $act + 250) | sudo tee -a $path/brightness
+        elif [ $1 == "++" ]; then
+		echo $(expr $act + 750) | sudo tee -a $path/brightness
+	elif [ $1 == "min" ]; then
+		echo 250 | sudo tee -a $path/brightness
+	elif [ $1 == "max" ]; then
+		echo 5250 | sudo tee -a $path/brightness
+	else
+		echo $1 | sudo tee -a $path/brightness
+	fi
+fi
+tput clear
+sudo echo "You've been ilLuMinated."
