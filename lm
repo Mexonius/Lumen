@@ -17,7 +17,7 @@ if [ $# == 0 ]; then
 		sudo echo -n ""
 		tput clear
 		sudo echo "#################"
-		sudo echo "# *-_*LuMen*_-* #"
+		sudo echo "# *-_*LuMeN*_-* #"
 		sudo echo "#################"
 		#sudo echo "# Valore attuale $act"
 		sudo echo "# commands:" 
